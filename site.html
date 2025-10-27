@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYED SHAYAN ALI SHAH - AI/ML Portfolio</title>
+    <!-- Load Google Fonts: Inter (Body) & Source Code Pro (Code/Headers) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    <!-- Load Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons --><script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Custom styles for smooth scroll and Inter font */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            /* Light theme background */
+            background-color: #f8fafc; /* Slate 50 (Very Light Gray) */
+            color: #374151; /* Dark Gray Text */
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            /* Allow body scroll on mobile, but manage scroll in content-panel for desktop */
+            overflow-y: auto; 
+            
+            /* Add padding-top to body to account for the fixed top navigation bar */
+            padding-top: 5rem; /* Sufficient space for the sticky-nav */
+        }
+
+        /* Override Tailwind font for a coding look in certain areas */
+        .font-code {
+            font-family: 'Source Code Pro', monospace;
+            font-weight: 500;
+        }
+        
+        /* Two-Column Layout Container */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* Default: Single column for mobile */
+            height: calc(100vh - 5rem); /* Adjust height to fill remaining viewport, minus nav height */
+        }
+        @media (min-width: 1024px) {
+            .main-grid {
+                /* Left (25%) | Right (75%) */
+                grid-template-columns: 1fr 3fr; 
+                height: calc(100vh - 5rem); /* Same adjustment for desktop */
+            }
+        }
+        
+        /* Left Sidebar (Fixed Profile Panel for Desktop) */
+        .sidebar {
+            background-color: #ffffff; /* White sidebar */
+            overflow-y: auto; /* Allow scrolling if profile is very long */
+            padding: 2.5rem 1.5rem;
+            border-right: 1px solid #e5e7eb; /* Subtle light gray divider */
+        }
+
+        /* Right Content Panel (Scrollable) */
+        .content-panel {
+            background-color: #f8fafc; /* Very Light Gray background */
+            overflow-y: auto; /* The primary scroll area */
+            padding: 2.5rem 2rem;
+            height: 100%; /* Important: Takes full height of its grid cell */
+        }
+        
+        /* Fixed Navigation Menu (Now top-level and fixed to viewport) */
+        .fixed-nav {
+            position: fixed;
+            top: 0; 
+            left: 0;
+            right: 0;
+            z-index: 50; /* High z-index to be on top */
+            background-color: #ffffff; /* White background for the bar */
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06); /* Stronger shadow for the top bar */
+        }
+        
+        /* Style for section headings in the content panel */
+        .section-heading {
+            border-bottom: 2px solid #3b82f6; /* Blue accent */
+            padding-bottom: 0.5rem;
+            color: #1f2937; /* Dark text for high contrast */
+            font-weight: 700;
+        }
+        
+        /* Card Styling for content items */
+        .content-card {
+            background-color: #ffffff; /* White cards */
+            border: 1px solid #d1d5db; /* Light gray border */
+            border-left: 4px solid #3b82f6; /* Accent border for visual hierarchy */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .content-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Subtle blue-tinted shadow */
+        }
+
+        /* Unified skill badge style (Clean look) */
+        .skill-badge {
+            transition: transform 0.2s ease-in-out, background-color 0.2s, color 0.2s;
+            background-color: #e0f2fe; /* Light Blue 100 */
+            color: #1e40af; /* Dark Blue 800 */
+            font-family: 'Source Code Pro', monospace;
+            font-weight: 600;
+            cursor: default;
+        }
+        .skill-badge:hover {
+            transform: scale(1.05);
+            background-color: #3b82f6; /* Accent blue on hover */
+            color: white;
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.4);
+        }
+        
+        /* Link styling in light mode */
+        a {
+            color: #3b82f6;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #1e40af;
+            text-decoration: underline;
+        }
+        
+        /* Sidebar Contact Icons */
+        .sidebar-contact-item {
+            display: flex;
+            align-items: center;
+            padding: 0.6rem 0;
+            font-size: 0.95rem;
+            color: #6b7280; /* Gray 500 */
+        }
+        .sidebar-contact-item a {
+            color: #4b5563; /* Gray 600 */
+        }
+        .sidebar-contact-item a:hover {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        /* Responsive adjustments for mobile */
+        @media (max-width: 1023px) {
+            body {
+                /* Remove fixed padding for mobile and let the flow work naturally */
+                padding-top: 0;
+            }
+            .sidebar {
+                border-right: none;
+                border-bottom: 1px solid #e5e7eb;
+                height: auto;
+                max-height: 50vh; /* Limits sidebar height on small screens */
+            }
+            .content-panel {
+                height: auto;
+                overflow-y: visible; /* Allows normal scroll flow on mobile */
+            }
+            .main-grid {
+                 display: block; 
+                 height: auto;
+            }
+            /* Adjust fixed nav for mobile to be less intrusive */
+             .fixed-nav {
+                 position: sticky; /* Make it sticky instead of fixed on mobile */
+                 top: 0;
+                 padding: 0.75rem 1rem;
+                 background-color: #f8fafc; /* Match body background on mobile */
+                 box-shadow: none; /* Less aggressive shadow on mobile */
+             }
+             .fixed-nav a {
+                 padding: 0.5rem 0.75rem; /* Better touch target for mobile */
+             }
+        }
+
+    </style>
+    
+    <script>
+        // Initialize Tailwind and configure custom colors
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#f8fafc', /* Slate 50 */
+                        'secondary-bg': '#ffffff', /* White */
+                        'accent-blue': '#3b82f6', /* Blue 500 */
+                        'text-dark': '#1f2937', /* Gray 900 */
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'mono': ['Source Code Pro', 'monospace'],
+                    },
+                }
+            }
+        }
+
+        // Function to initialize Lucide icons and add interactivity
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            
+            // Interactivity: Smooth Scrolling for Navigation 
+            const navLinks = document.querySelectorAll('.nav-link-scroll');
+            
+            // Check for desktop environment (where only content-panel scrolls)
+            const isDesktop = window.innerWidth >= 1024;
+            
+            // Get the scrollable container and the fixed navigation bar
+            const scrollContainer = document.getElementById('content-panel');
+            const fixedNav = document.getElementById('fixed-nav');
+
+            // Determine the height of the navigation bar for scrolling offset
+            let navHeight = fixedNav.offsetHeight;
+
+            // On mobile, the nav is sticky, so we need to use the standard document scroll
+            // and the offset is based on the nav height.
+            if (!isDesktop) {
+                 // For mobile, we use the standard body scroll and calculate the target position
+                 // relative to the entire document.
+                 navHeight = 0; // The mobile nav is sticky inside the body scroll, so we use 0 offset here.
+                 // We rely on the browser's default scroll behavior to handle the sticky nav offset correctly.
+            }
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement && scrollContainer) {
+                        
+                        if (isDesktop) {
+                             // Desktop: Content-panel scrolls, position relative to its top
+                            const targetOffsetTop = targetElement.offsetTop;
+                            const targetScroll = targetOffsetTop - fixedNav.offsetHeight - 24; // Added small buffer (24px)
+                            
+                            scrollContainer.scrollTo({
+                                top: targetScroll,
+                                behavior: 'smooth'
+                            });
+                        } else {
+                            // Mobile: Body scrolls, position relative to viewport top
+                            // Get the element's position relative to the entire document, then subtract the fixed nav height.
+                            const bodyScrollTop = window.scrollY;
+                            const elementTop = targetElement.getBoundingClientRect().top + bodyScrollTop;
+                            
+                            // Scroll to the calculated position, minus the fixed nav's height, plus a small buffer
+                            window.scrollTo({
+                                top: elementTop - fixedNav.offsetHeight - 24, 
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
+            });
+            
+            // Recalculate nav height on resize for better offset accuracy
+            window.addEventListener('resize', () => {
+                navHeight = fixedNav.offsetHeight;
+            });
+        });
+    </script>
+</head>
+<body class="antialiased">
+
+    <!-- TOP-LEVEL FIXED NAVIGATION MENU (Now justified to the right) -->
+    <nav id="fixed-nav" class="fixed-nav flex flex-wrap justify-end gap-4 lg:gap-8 font-semibold text-gray-600 text-sm">
+        <a href="#about" class="nav-link-scroll flex items-center p-2 rounded-lg hover:bg-gray-200 transition duration-150 hover:text-accent-blue">
+            <i data-lucide="user" class="w-4 h-4 mr-1 lg:mr-2 text-accent-blue"></i> About Me
+        </a>
+        <a href="#education" class="nav-link-scroll flex items-center p-2 rounded-lg hover:bg-gray-200 transition duration-150 hover:text-accent-blue">
+            <i data-lucide="graduation-cap" class="w-4 h-4 mr-1 lg:mr-2 text-accent-blue"></i> Education
+        </a>
+        <a href="#experience" class="nav-link-scroll flex items-center p-2 rounded-lg hover:bg-gray-200 transition duration-150 hover:text-accent-blue">
+            <i data-lucide="briefcase" class="w-4 h-4 mr-1 lg:mr-2 text-accent-blue"></i> Experience
+        </a>
+        <a href="#skills" class="nav-link-scroll flex items-center p-2 rounded-lg hover:bg-gray-200 transition duration-150 hover:text-accent-blue">
+            <i data-lucide="bolt" class="w-4 h-4 mr-1 lg:mr-2 text-accent-blue"></i> Skills
+        </a>
+        <a href="#publication" class="nav-link-scroll flex items-center p-2 rounded-lg hover:bg-gray-200 transition duration-150 hover:text-accent-blue">
+            <i data-lucide="file-text" class="w-4 h-4 mr-1 lg:mr-2 text-accent-blue"></i> Publications
+        </a>
+    </nav>
+
+
+    <!-- MAIN CONTENT GRID (Now sits below the fixed navigation) -->
+    <div class="main-grid">
+        
+        <!-- Left Sidebar: Fixed Profile and Links -->
+        <aside class="sidebar lg:sticky lg:top-0">
+            <div class="flex flex-col items-center text-center space-y-6">
+                
+                <!-- Profile Image -->
+                <div class="relative w-32 h-32 rounded-full overflow-hidden shadow-xl border-4 border-accent-blue">
+                    <img src="https://raw.githubusercontent.com/ItsCodeBakery/itscodebakery.github.io/main/assets/502465705_29672271555750259_7763675694741651502_n.jpg" alt="Syed Shayan Ali Shah" class="w-full h-full object-cover">
+                </div>
+                
+                <!-- Name and Creative Tagline -->
+                <div class="space-y-1">
+                    <h1 class="text-3xl font-extrabold text-gray-900 tracking-wide">SYED SHAYAN ALI SHAH</h1>
+                    <p class="text-sm font-code text-gray-500 pt-2">
+                        I am a <span class="font-semibold text-gray-700">Programmer</span> in my mind.
+                    </p>
+                    <p class="text-sm font-code text-gray-500">
+                        An <span class="text-green-600 font-semibold">Educator</span> by profession.
+                    </p>
+                </div>
+                
+                <!-- Contact Links (Bottom of Sidebar) -->
+                <div class="w-full pt-6 space-y-1.5 border-t border-gray-200">
+                    
+                    <div class="sidebar-contact-item">
+                        <i data-lucide="mail" class="w-5 h-5 mr-3 text-red-500"></i>
+                        <a href="mailto:shayan.ali@imsciences.edu.pk">shayan.ali@imsciences.edu.pk</a>
+                    </div>
+                    <div class="sidebar-contact-item">
+                        <i data-lucide="phone" class="w-5 h-5 mr-3 text-green-600"></i>
+                        <span>(+92) 3239257850</span>
+                    </div>
+                    <div class="sidebar-contact-item">
+                        <i data-lucide="linkedin" class="w-5 h-5 mr-3 text-blue-600"></i>
+                        <a href="https://www.linkedin.com/in/itsshayanprofile/" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a>
+                    </div>
+                    <div class="sidebar-contact-item">
+                        <i data-lucide="github" class="w-5 h-5 mr-3 text-gray-700"></i>
+                        <a href="https://github.com/ItsCodeBakery" target="_blank" rel="noopener noreferrer">GitHub /ItsCodeBakery</a>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- Right Content Panel: Scrollable Sections -->
+        <main id="content-panel" class="content-panel">
+
+            <!-- About Me Section -->
+            <section id="about" class="mb-12">
+                <h2 class="text-2xl font-bold mb-6 section-heading">
+                    <i data-lucide="user" class="inline-block w-5 h-5 mr-2 text-accent-blue"></i> About Me
+                </h2>
+                <div class="content-card p-6 rounded-xl shadow-lg">
+                    <p class="text-base leading-relaxed text-gray-700">
+                        I am a <span class="font-bold text-gray-900">Lecturer in Computer Science</span> at Government College of Management Sciences, Peshawar (Pakistan). I completed my MS in Computer Science at IMSciences with <span class="font-bold text-yellow-600">Distinction (Gold Medal)</span>. As a prospective PhD student, my research interests center on <span class="font-bold text-accent-blue">computer vision</span>, <span class="font-bold text-accent-blue">self-supervised learning</span>, <span class="font-bold text-accent-blue">LLMs/VLMs</span>, and <span class="font-bold text-accent-blue">medical imaging</span>. I build high-accuracy, efficient models with strong generalization and clear interpretability. I value open, reproducible research. Beyond academia, I'm a <span class="font-bold text-gray-900">Top-Rated freelancer</span>, passionate about programming, self-motivated, and an <span class="font-bold text-gray-900">effective team player</span>.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Education Section -->
+            <section id="education" class="mb-12">
+                <h2 class="text-2xl font-bold mb-6 section-heading">
+                    <i data-lucide="graduation-cap" class="inline-block w-5 h-5 mr-2 text-accent-blue"></i> Education
+                </h2>
+                <div class="space-y-6">
+                    <!-- MS Degree -->
+                    <div class="content-card p-5 rounded-xl shadow-md">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">MS Computer Science</h3>
+                            <span class="text-sm text-gray-500 font-code">Oct 2017 - Feb 2020</span>
+                        </div>
+                        <p class="text-gray-600 mb-2">Institute of Management Sciences (IMSciences), Peshawar</p>
+                        <div class="flex flex-wrap items-center space-x-4 text-sm">
+                            <span class="font-bold text-yellow-600 flex items-center"><i data-lucide="star" class="w-4 h-4 mr-1 fill-yellow-500 text-yellow-500"></i> Gold Medal (Top of Class)</span>
+                            <span class="text-gray-400">|</span>
+                            <span class="text-gray-500 font-code">CGPA: 3.9/4.0</span>
+                        </div>
+                    </div>
+
+                    <!-- BS Degree -->
+                    <div class="content-card p-5 rounded-xl shadow-md">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">BS Computer Science</h3>
+                            <span class="text-sm text-gray-500 font-code">Sep 2011 - Mar 2016</span>
+                        </div>
+                        <p class="text-gray-600 mb-2">University of Peshawar, Khyber Pakhtunkhwa, Pakistan</p>
+                        <div class="flex items-center space-x-4 text-sm">
+                            <!-- UPDATED: Changed text-gray-500 to text-gray-700 for better visibility/darkness -->
+                            <span class="text-gray-700 font-code">CGPA: 3.6/4.0</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Experience Section -->
+            <section id="experience" class="mb-12">
+                <h2 class="text-2xl font-bold mb-6 section-heading">
+                    <i data-lucide="briefcase" class="inline-block w-5 h-5 mr-2 text-accent-blue"></i> Experience
+                </h2>
+                <div class="space-y-6">
+                    <!-- GCMS Experience -->
+                    <div class="content-card p-5 rounded-xl shadow-md">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">Lecturer in Computer Science</h3>
+                            <span class="text-sm text-gray-500 font-code">Nov 2018 - Present</span>
+                        </div>
+                        <p class="text-gray-600 mb-2">Government College of Management Sciences (GCMS), Peshawar</p>
+                        <p class="text-sm text-gray-500"><span class="font-bold text-gray-700">Subjects:</span> Programming Fundamentals, Database Development, Introduction to C++.</p>
+                    </div>
+
+                    <!-- IMSciences Experience -->
+                    <div class="content-card p-5 rounded-xl shadow-md">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">Lecturer in Computer Science (Visiting)</h3>
+                            <span class="text-sm text-gray-500 font-code">Sep 2024 - Present</span>
+                        </div>
+                        <p class="text-gray-600 mb-2">Institute of Management Sciences (IMSciences)</p>
+                        <p class="text-sm text-gray-500"><span class="font-bold text-gray-700">Subjects:</span> Data Structures, Data Visualization, DBMS (PostgreSQL), Introduction to Machine Learning.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Skills Section -->
+            <section id="skills" class="mb-12">
+                <h2 class="text-2xl font-bold mb-6 section-heading">
+                    <i data-lucide="bolt" class="inline-block w-5 h-5 mr-2 text-accent-blue"></i> Skills & Expertise
+                </h2>
+                <div class="content-card p-6 sm:p-8 rounded-xl shadow-xl">
+                    
+                    <!-- 1. Core Programming -->
+                    <div class="mb-6 pb-6 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center"><i data-lucide="code" class="w-5 h-5 mr-2 text-red-500"></i> Core Programming Languages</h3>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="skill-badge px-3 py-1 text-sm rounded-md shadow-sm">Python</span>
+                            <span class="skill-badge px-3 py-1 text-sm rounded-md shadow-sm">Java</span>
+                            <span class="skill-badge px-3 py-1 text-sm rounded-md shadow-sm">C++</span>
+                            <span class="skill-badge px-3 py-1 text-sm rounded-md shadow-sm">C#</span>
+                        </div>
+                    </div>
+
+                    <!-- 2. Deep Learning & CV -->
+                    <div class="mb-6 pb-6 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center"><i data-lucide="cpu" class="w-5 h-5 mr-2 text-cyan-600"></i> Deep Learning & Computer Vision (CV)</h3>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="skill-badge px-3 py-1 text-sm rounded-md shadow-sm">Vision Transformers</span>
+                            <span class="skill-badge px-3 py-1 text-sm rounded-md shadow-sm">CNNs</span>
+                            <span class="skill-badge px-3 py-1 text-sm rounded-md shadow-sm">Contrastive Learning</span>
+                            <span class="skill-badge px-3 py-1 text-sm rounded-md shadow-sm">GANs</span>
+                            <span class="skill-badge px-3 py-1 text-sm rounded-md shadow-sm">Diffusion Models</span>
+                        </div>
+                    </div>
+
+                    <!-- 3. LLM & Multimodal AI -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center"><i data-lucide="message-square-text" class="w-5 h-5 mr-2 text-purple-600"></i> LLM & Multimodal AI</h3>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="skill-badge px-3 py-1 text-sm rounded-md shadow-sm">Hugging Face Transformers</span>
+                            <span class="skill-badge px-3 py-1 text-sm rounded-md shadow-sm">CLIP</span>
+                            <span class="skill-badge px-3 py-1 text-sm rounded-md shadow-sm">LangChain</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Publication Section -->
+            <section id="publication" class="mb-12">
+                <h2 class="text-2xl font-bold mb-6 section-heading">
+                    <i data-lucide="file-text" class="inline-block w-5 h-5 mr-2 text-accent-blue"></i> Key Research Publications
+                </h2>
+                <div class="space-y-8">
+
+                    <!-- PUBLICATION 1: PlantCLR -->
+                    <div class="content-card p-6 sm:p-8 rounded-xl shadow-xl">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-3">PlantCLR: Leveraging Self-Supervised Contrastive Learning for Generalizable Plant Disease Detection</h3>
+                        <p class="text-sm text-gray-500 italic mb-5">Syed Shayan Ali Shah, et al. | Submitted Manuscript | Smart Agriculture Technology (IF: 5.7)</p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                            <!-- Overview - Now uses flex to vertically center content -->
+                            <div class="flex flex-col justify-center h-full">
+                                <h4 class="text-lg font-semibold text-accent-blue mb-2">Project Overview</h4>
+                                <p class="text-gray-700 mb-4 leading-relaxed text-sm">
+                                    This research introduces <span class="font-bold text-gray-900">PlantCLR</span>, a novel framework utilizing <span class="font-bold text-gray-900">self-supervised contrastive learning</span> to significantly improve the generalization capability of plant disease detection models. The approach addresses the challenge of data scarcity and environmental variability, allowing the model to perform robustly across diverse, real-world datasets and scenarios.
+                                </p>
+                                <a href="https://github.com/ItsCodeBakery/PlantPathalogy" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-green-600 hover:bg-green-700 transition duration-300 w-fit">
+                                    <i data-lucide="github" class="w-4 h-4 mr-2"></i> View Code
+                                </a>
+                            </div>
+
+                            <!-- Methodology Image - Now uses flex to vertically center diagram -->
+                            <div class="flex flex-col justify-center h-full">
+                                <h4 class="text-lg font-semibold text-accent-blue mb-2">Methodology Diagram</h4>
+                                <div class="rounded-lg overflow-hidden border border-gray-300 shadow-md">
+                                     <!-- The image URL for PlantCLR diagram -->
+                                     <img src="https://raw.githubusercontent.com/ItsCodeBakery/itscodebakery.github.io/main/assets/CLR_Dia.png" alt="Diagram of the PlantCLR Self-Supervised Contrastive Learning Framework" class="w-full h-auto object-cover" onerror="this.onerror=null;this.src='https://placehold.co/800x400/3b82f6/ffffff?text=PlantCLR+Diagram+Placeholder';">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- PUBLICATION 2: XDR-NET -->
+                    <div class="content-card p-6 sm:p-8 rounded-xl shadow-xl">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-3">XDR-NET: Hybrid CNN–Transformer Network for Diabetic Retinopathy Detection</h3>
+                        <p class="text-sm text-gray-500 italic mb-5">Syed Shayan Ali Shah, et al. | Manuscript in Preparation</p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                            <!-- Overview - Now uses flex to vertically center content -->
+                            <div class="flex flex-col justify-center h-full">
+                                <h4 class="text-lg font-semibold text-accent-blue mb-2">Project Overview</h4>
+                                <p class="text-gray-700 mb-4 leading-relaxed text-sm">
+                                    XDR-Net is an explainable hybrid CNN–Vision Transformer (ViT) model designed for automated Diabetic Retinopathy (ICDR 0–4) grading from high-resolution fundus images. The architecture effectively combines local feature extraction (CNN) with global spatial reasoning (ViT) to accurately detect multi-scale lesions (microaneurysms, hemorrhages, exudates) under varying image conditions.
+                                </p>
+                                <p class="text-gray-700 mb-4 leading-relaxed text-sm">
+                                    The model achieved superior performance on the APTOS-2019 dataset, boasting <span class="font-bold text-gray-900">97.30% Validation F1-score</span> and <span class="font-bold text-gray-900">97.88% AUC</span>. It also provides calibrated probabilities and Grad-CAM heatmaps for case-level interpretability.
+                                </p>
+                                <a href="https://github.com/ItsCodeBakery/XDR-NET" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-green-600 hover:bg-green-700 transition duration-300 w-fit">
+                                    <i data-lucide="github" class="w-4 h-4 mr-2"></i> View Code
+                                </a>
+                            </div>
+
+                            <!-- Methodology Image - Now uses flex to vertically center diagram -->
+                            <div class="flex flex-col justify-center h-full">
+                                <h4 class="text-lg font-semibold text-accent-blue mb-2">Methodology Diagram</h4>
+                                <div class="rounded-lg overflow-hidden border border-gray-300 shadow-md">
+                                    <img src="https://raw.githubusercontent.com/ItsCodeBakery/itscodebakery.github.io/main/assets/METHODLOGY.png" alt="Diagram of the XDR-NET Hybrid CNN-Transformer Architecture" class="w-full h-auto object-cover" onerror="this.onerror=null;this.src='https://placehold.co/800x400/3b82f6/ffffff?text=XDR-NET+Diagram+Placeholder';">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+
+            <!-- Footer for the content area -->
+            <footer class="mt-12 pt-8 border-t border-gray-200 text-center text-sm text-gray-400 font-code">
+                <p>// End of File: SYED_SHAYAN_ALI_SHAH.profile</p>
+                <p>&copy; 2025 Syed Shayan Ali Shah. Built with Code and Science.</p>
+            </footer>
+
+        </main>
+    </div>
+
+</body>
+</html>
